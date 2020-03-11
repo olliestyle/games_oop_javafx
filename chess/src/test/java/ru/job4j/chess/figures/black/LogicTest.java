@@ -16,11 +16,20 @@ public class LogicTest {
     public void whenAnotherFigureOnTheWay() {
         Logic logic = new Logic();
         Figure bishop = new BishopBlack(Cell.C1);
-        Figure pawn = new PawnBlack(Cell.D2);
+        Figure pawn = new PawnBlack(Cell.E3);
         logic.add(bishop);
         logic.add(pawn);
-        logic.move(Cell.C1,Cell.G5);
-        assertThat(bishop.position(), is(Cell.C1));
+        boolean result = logic.move(Cell.C1,Cell.G5);
+        assertThat(result, is(false));
+    }
+
+    @Test
+    public void whenWayIsFree() {
+        Logic logic = new Logic();
+        Figure bishop = new BishopBlack(Cell.C1);
+        logic.add(bishop);
+        boolean result = logic.move(Cell.C1,Cell.G5);
+        assertThat(result, is(true));
     }
 
 }

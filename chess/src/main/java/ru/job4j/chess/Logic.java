@@ -27,23 +27,18 @@ public class Logic {
             if (index != -1) {
                 try {
                     Cell[] steps = this.figures[index].way(source, dest);
-                    for(Cell cell: steps) {
-                        for (Figure figure : figures) {
-                            if (figure.position().equals(cell)) {
-                                System.out.println("There's another figure on your way");
-                                return rst;
-                            }
+                    if(!isWayOccupied(steps)){
+                        if (steps.length > 0 && steps[steps.length - 1].equals(dest)) {
+                            rst = true;
+                            this.figures[index] = this.figures[index].copy(dest);
                         }
-                    }
-                    if (steps.length > 0 && steps[steps.length - 1].equals(dest)) {
-                        rst = true;
-                        this.figures[index] = this.figures[index].copy(dest);
+                    } else {
+                        System.out.println("The way is occupied");
                     }
                 } catch (IllegalStateException e) {
                     System.out.println(e.getMessage());
                 }
             }
-
         return rst;
     }
 
@@ -63,6 +58,15 @@ public class Logic {
             }
         }
         return rst;
+    }
+
+    public boolean isWayOccupied(Cell[] way) {
+        for(Cell cell: way) {
+            if (this.findBy(cell) != -1){
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override

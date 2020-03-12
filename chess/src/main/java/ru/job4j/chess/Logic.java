@@ -27,7 +27,8 @@ public class Logic {
             if (index != -1) {
                 try {
                     Cell[] steps = this.figures[index].way(source, dest);
-                    if(!isWayOccupied(steps)){
+                    //if(!isWayOccupied(steps)){
+                    if(isWayFree(steps)) {
                         if (steps.length > 0 && steps[steps.length - 1].equals(dest)) {
                             rst = true;
                             this.figures[index] = this.figures[index].copy(dest);
@@ -67,6 +68,15 @@ public class Logic {
             }
         }
         return false;
+    }
+
+    private boolean isWayFree(Cell[] way) {
+        for (Cell cell: way) {
+            if (this.findBy(cell) != -1) {
+                return false;
+            }
+        }
+        return true;
     }
 
     @Override

@@ -1,6 +1,7 @@
 package job4j.tictactoe;
 
 import java.util.function.Predicate;
+import java.util.stream.Stream;
 
 public class Logic3T {
     private final Figure3T[][] table;
@@ -23,37 +24,37 @@ public class Logic3T {
         return result;
     }
 
+    private boolean isWin(Predicate<Figure3T> winCondition) {
+        return  this.fillBy(winCondition, 0, 0, 1, 0) ||
+                this.fillBy(winCondition, 0, 0, 0, 1) ||
+                this.fillBy(winCondition, 0,0, 1, 1) ||
+                this.fillBy(winCondition, this.table.length - 1 , 0, -1, 1) ||
+                this.fillBy(winCondition, 0, 1, 1,0) ||
+                this.fillBy(winCondition, 0, 2, 1,0) ||
+                this.fillBy(winCondition, 1, 0, 0,1) ||
+                this.fillBy(winCondition, 2, 0, 0,1);
+    }
+
     public boolean isWinnerX() {
-        return this.fillBy(Figure3T::hasMarkX, 0, 0, 1, 0) ||
-                this.fillBy(Figure3T::hasMarkX, 0, 0, 0, 1) ||
-                this.fillBy(Figure3T::hasMarkX, 0,0, 1, 1) ||
-                this.fillBy(Figure3T::hasMarkX, this.table.length - 1 , 0, -1, 1) ||
-                this.fillBy(Figure3T::hasMarkX, 0, 1, 1,0) ||
-                this.fillBy(Figure3T::hasMarkX, 0, 2, 1,0) ||
-                this.fillBy(Figure3T::hasMarkX, 1, 0, 0,1) ||
-                this.fillBy(Figure3T::hasMarkX, 2, 0, 0,1);
+        return isWin(Figure3T::hasMarkX);
     }
 
     public boolean isWinnerO() {
-        return this.fillBy(Figure3T::hasMarkO, 0, 0, 1, 0) ||
-                this.fillBy(Figure3T::hasMarkO, 0, 0, 0, 1) ||
-                this.fillBy(Figure3T::hasMarkO, 0,0, 1, 1) ||
-                this.fillBy(Figure3T::hasMarkO, this.table.length - 1, 0, -1, 1)||
-                this.fillBy(Figure3T::hasMarkO, 0, 1, 1,0) ||
-                this.fillBy(Figure3T::hasMarkO, 0, 2, 1,0) ||
-                this.fillBy(Figure3T::hasMarkO, 1, 0, 0,1) ||
-                this.fillBy(Figure3T::hasMarkO, 2, 0, 0,1);
+        return isWin(Figure3T::hasMarkO);
     }
 
     public boolean hasGap() {
-        boolean state = false;
-        for (int i = 0; i < table.length; i++) {
-            for (int j = 0; j < table[i].length; j++) {
-                if (!table[i][j].hasMarkO() && !table[i][j].hasMarkX()) {
-                    state = true;
-                }
-            }
-        }
-        return state;
+        return Stream.of(table)
+                .flatMap(littleTable -> Stream.of(littleTable))
+                .anyMatch(figure3T -> !figure3T.hasMarkX() && !figure3T.hasMarkO());
+//        boolean state = false;
+//        for (int i = 0; i < table.length; i++) {
+//            for (int j = 0; j < table[i].length; j++) {
+//                if (!table[i][j].hasMarkO() && !table[i][j].hasMarkX()) {
+//                    state = true;
+//                }
+//            }
+//        }
+//        return state;
     }
 }
